@@ -8,33 +8,59 @@ import { motion, AnimatePresence } from "framer-motion";
 const Nav = () => {
   const [isNavOpen, setIsnavOpen] = useState(false);
 
+  const [activeNav, setActivenav] = useState("");
+
   const handleNavopen = () => {
     setIsnavOpen((prev) => !prev);
   };
 
   return (
-    <nav className="w-full fixed inset-x-0 top-0 left-0 z-50 ">
+    <nav
+      className="w-full fixed inset-x-0 top-0 left-0 z-50 "
+      role="navigation"
+      aria-label="Main navigation"
+    >
       {/* Desktop */}
       <div className="hidden lg:flex  items-center mx-auto text-white px-8 py-5 rounded-b-lg bg-background gap-x-20 ">
         {/* logo */}
-        <div className="flex items-center justify-center gap-x-4.5  ml-7">
+        <div className="flex items-center justify-center gap-x-4.5  ml-7 cursor-pointer">
           <img
             src={IMG}
             alt="Asty Properties Logo"
             className="h-16 stroke-logo"
           />
-          <h3 className="text-2xl font-extrabold tracking-tight leading-none primary-glow pointer">
+          <a
+            className="text-2xl font-extrabold tracking-tight leading-none primary-glow pointer cursor-pointer"
+            href="#"
+          >
             <span className="text-primary">ASTY</span>
             <br />
             PROPERTIES
-          </h3>
+          </a>
         </div>
         {/* Nav menus */}
-        <ul className="flex items-center justify-end gap-x-7 text-primary  text-2xl lg:gap-x-36  lg:w-[50%] mx-auto">
+        <ul
+          role="menu"
+          className="flex items-center justify-end gap-x-7 text-primary  text-2xl lg:gap-x-36  lg:w-[50%] mx-auto"
+        >
           {navInfo.map((info, i) => {
             return (
-              <li className=" underline-animation" key={i}>
-                <a href={info.path} className="lg:font-semibold pointer">
+              <li
+                role="menuitem"
+                className={cn(
+                  " underline-animation relative",
+                  activeNav === info.title
+                    ? "text-white after:content-[''] after:absolute after:-bottom-0.5 after:h-[3px] after:w-full after:bg-primary/70 after:block"
+                    : ""
+                )}
+                key={i}
+                onClick={() => setActivenav(info.title)}
+              >
+                <a
+                  href={info.path}
+                  className="lg:font-semibold pointer"
+                  aria-current={activeNav === info ? "page" : undefined}
+                >
                   {info.title}
                 </a>
               </li>
@@ -53,11 +79,14 @@ const Nav = () => {
         >
           <div className="flex items-center justify-center gap-x-4">
             <img src={IMG} alt="Asty Properties Logo" className="h-7" />
-            <h3 className=" tracking-tight leading-none primary-glow text-md font-semibold ">
+            <a
+              className=" tracking-tight leading-none primary-glow text-md font-semibold "
+              href="#"
+            >
               <span className="text-primary">ASTY</span>
               <br />
               PROPERTIES
-            </h3>
+            </a>
           </div>
           <MenuIcon
             className="text-primary"
@@ -81,11 +110,14 @@ const Nav = () => {
               <div className="  px-3 items-center justify-between py-2 text-white flex">
                 <div className="flex items-center justify-center gap-x-4">
                   <img src={IMG} alt="Asty Properties Logo" className="h-7" />
-                  <h3 className=" tracking-tight leading-none primary-glow text-md font-semibold text-[1.5rem]">
+                  <a
+                    className=" tracking-tight leading-none primary-glow text-md font-semibold text-[1.5rem]"
+                    href="#"
+                  >
                     <span className="text-primary">ASTY</span>
                     <br />
                     PROPERTIES
-                  </h3>
+                  </a>
                 </div>
                 <X
                   className="text-primary "
@@ -93,10 +125,14 @@ const Nav = () => {
                   onClick={handleNavopen}
                 />
               </div>
-              <ul className="flex flex-col  justify-between gap-y-6 mt-6 text-2xl items-center md:gap-y-9 md:text-3xl px-10">
+              <ul
+                role="menu"
+                className="flex flex-col  justify-between gap-y-6 mt-6 text-2xl items-center md:gap-y-9 md:text-3xl px-10"
+              >
                 {navInfo.map((info, i) => {
                   return (
                     <motion.li
+                      role="menuitem"
                       className="p-3  w-full rounded-md backdrop-blur-sm border-2 border-primary/20 text-center"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -108,7 +144,14 @@ const Nav = () => {
                       }}
                       key={i}
                     >
-                      <a onClick={handleNavopen} href={info.path}>
+                      <a
+                        onClick={() => {
+                          setActivenav(info.title);
+                          handleNavopen();
+                        }}
+                        href={info.path}
+                        aria-current={activeNav === info ? "page" : undefined}
+                      >
                         {info.title}
                       </a>
                     </motion.li>
